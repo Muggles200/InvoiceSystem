@@ -1,0 +1,86 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BE733A77-D0AC-4C9C-8EB7-0C639026EE56}|InvoiceSystem\\InvoiceSystem.csproj|c:\\users\\franc\\source\\repos\\invoicesystem\\invoicesystem\\invoices.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{BE733A77-D0AC-4C9C-8EB7-0C639026EE56}|InvoiceSystem\\InvoiceSystem.csproj|solutionrelative:invoicesystem\\invoices.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE733A77-D0AC-4C9C-8EB7-0C639026EE56}|InvoiceSystem\\InvoiceSystem.csproj|C:\\Users\\franc\\source\\repos\\InvoiceSystem\\invoicesystem\\invoices.aspx.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE733A77-D0AC-4C9C-8EB7-0C639026EE56}|InvoiceSystem\\InvoiceSystem.csproj|solutionrelative:invoicesystem\\invoices.aspx.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE733A77-D0AC-4C9C-8EB7-0C639026EE56}|InvoiceSystem\\InvoiceSystem.csproj|C:\\Users\\franc\\source\\repos\\InvoiceSystem\\invoicesystem\\invoices.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE733A77-D0AC-4C9C-8EB7-0C639026EE56}|InvoiceSystem\\InvoiceSystem.csproj|solutionrelative:invoicesystem\\invoices.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE733A77-D0AC-4C9C-8EB7-0C639026EE56}|InvoiceSystem\\InvoiceSystem.csproj|C:\\Users\\franc\\source\\repos\\InvoiceSystem\\invoicesystem\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{BE733A77-D0AC-4C9C-8EB7-0C639026EE56}|InvoiceSystem\\InvoiceSystem.csproj|solutionrelative:invoicesystem\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Invoices.aspx.designer.cs",
+              "DocumentMoniker": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\InvoiceSystem\\Invoices.aspx.designer.cs",
+              "RelativeDocumentMoniker": "InvoiceSystem\\Invoices.aspx.designer.cs",
+              "ToolTip": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\InvoiceSystem\\Invoices.aspx.designer.cs",
+              "RelativeToolTip": "InvoiceSystem\\Invoices.aspx.designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-04T19:48:02.173Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Invoices.aspx.cs",
+              "DocumentMoniker": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\InvoiceSystem\\Invoices.aspx.cs",
+              "RelativeDocumentMoniker": "InvoiceSystem\\Invoices.aspx.cs",
+              "ToolTip": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\InvoiceSystem\\Invoices.aspx.cs",
+              "RelativeToolTip": "InvoiceSystem\\Invoices.aspx.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAAACEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-04T19:43:54.596Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Invoices.aspx",
+              "DocumentMoniker": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\InvoiceSystem\\Invoices.aspx",
+              "RelativeDocumentMoniker": "InvoiceSystem\\Invoices.aspx",
+              "ToolTip": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\InvoiceSystem\\Invoices.aspx",
+              "RelativeToolTip": "InvoiceSystem\\Invoices.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-03-04T19:41:53.976Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Web.config",
+              "DocumentMoniker": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\InvoiceSystem\\Web.config",
+              "RelativeDocumentMoniker": "InvoiceSystem\\Web.config",
+              "ToolTip": "C:\\Users\\franc\\source\\repos\\InvoiceSystem\\InvoiceSystem\\Web.config",
+              "RelativeToolTip": "InvoiceSystem\\Web.config",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-03-04T19:31:50.134Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
