@@ -18,6 +18,28 @@
             </div>
         </div>
         <div class="row">
+            <asp:Label runat="server" AssociatedControlID="FirstName" CssClass="col-md-2 col-form-label">First Name</asp:Label>
+            <div class="col-md-10">
+                <asp:TextBox runat="server" ID="FirstName" CssClass="form-control" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="FirstName"
+                    CssClass="text-danger" ErrorMessage="The first name field is required." />
+            </div>
+        </div>
+        <div class="row">
+            <asp:Label runat="server" AssociatedControlID="LastName" CssClass="col-md-2 col-form-label">Last Name</asp:Label>
+            <div class="col-md-10">
+                <asp:TextBox runat="server" ID="LastName" CssClass="form-control" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="LastName"
+                    CssClass="text-danger" ErrorMessage="The last name field is required." />
+            </div>
+        </div>
+        <div class="row">
+            <asp:Label runat="server" AssociatedControlID="CompanyName" CssClass="col-md-2 col-form-label">Company Name</asp:Label>
+            <div class="col-md-10">
+                <asp:TextBox runat="server" ID="CompanyName" CssClass="form-control" />
+            </div>
+        </div>
+        <div class="row">
             <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-2 col-form-label">Password</asp:Label>
             <div class="col-md-10">
                 <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" />

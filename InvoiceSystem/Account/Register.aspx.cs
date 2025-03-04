@@ -15,10 +15,21 @@ namespace InvoiceSystem.Account
         {
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
-            var user = new ApplicationUser() { UserName = Email.Text, Email = Email.Text };
+            var user = new ApplicationUser() 
+            { 
+                UserName = Email.Text, 
+                Email = Email.Text,
+                FirstName = FirstName.Text,
+                LastName = LastName.Text,
+                CompanyName = CompanyName.Text,
+                CreatedDate = DateTime.Now
+            };
             IdentityResult result = manager.Create(user, Password.Text);
             if (result.Succeeded)
             {
+                // Assign the user role
+                var roleResult = manager.AddToRole(user.Id, "User");
+                
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 //string code = manager.GenerateEmailConfirmationToken(user.Id);
                 //string callbackUrl = IdentityHelper.GetUserConfirmationRedirectUrl(code, user.Id, Request);

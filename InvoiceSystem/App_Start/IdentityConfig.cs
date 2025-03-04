@@ -28,6 +28,54 @@ namespace InvoiceSystem
         }
     }
 
+    public static class IdentityHelper
+    {
+        public static void SeedRoles(ApplicationDbContext context)
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
+            // Create roles if they don't exist
+            if (!roleManager.RoleExists("Admin"))
+            {
+                roleManager.Create(new IdentityRole("Admin"));
+            }
+            
+            if (!roleManager.RoleExists("User"))
+            {
+                roleManager.Create(new IdentityRole("User"));
+            }
+        }
+
+        public static void SeedAdminUser(ApplicationUserManager manager)
+        {
+            // Check if the admin user exists
+            var adminUser = manager.FindByName("admin@invoicesystem.com");
+            
+            if (adminUser == null)
+            {
+                // Create the admin user
+                adminUser = new ApplicationUser
+                {
+                    UserName = "admin@invoicesystem.com",
+                    Email = "admin@invoicesystem.com",
+                    FirstName = "System",
+                    LastName = "Administrator",
+                    CompanyName = "Invoice System",
+                    CreatedDate = DateTime.Now
+                };
+
+                // Create the admin with the password
+                var result = manager.Create(adminUser, "Admin@123");
+                
+                if (result.Succeeded)
+                {
+                    // Add the admin user to the Admin role
+                    manager.AddToRole(adminUser.Id, "Admin");
+                }
+            }
+        }
+    }
+
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {

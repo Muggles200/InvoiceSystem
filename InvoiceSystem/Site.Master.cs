@@ -7,6 +7,8 @@ using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using InvoiceSystem.Models;
 
 namespace InvoiceSystem
 {
@@ -76,6 +78,26 @@ namespace InvoiceSystem
         {
             Context.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }
+        
+        protected string GetUserFullName()
+        {
+            if (Context.User.Identity.IsAuthenticated)
+            {
+                var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                var user = manager.FindById(Context.User.Identity.GetUserId());
+                
+                if (user != null)
+                {
+                    if (!string.IsNullOrEmpty(user.FirstName) && !string.IsNullOrEmpty(user.LastName))
+                    {
+                        return $"{user.FirstName} {user.LastName}";
+                    }
+                }
+                
+                return Context.User.Identity.GetUserName();
+            }
+            
+            return string.Empty;
+        }
     }
-
 }

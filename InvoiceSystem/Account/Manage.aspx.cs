@@ -61,6 +61,9 @@ namespace InvoiceSystem.Account
                     ChangePassword.Visible = false;
                 }
 
+                // Load user profile information
+                LoadUserProfile();
+
                 // Render success message
                 var message = Request.QueryString["m"];
                 if (message != null)
@@ -74,12 +77,52 @@ namespace InvoiceSystem.Account
                         : message == "RemoveLoginSuccess" ? "The account was removed."
                         : message == "AddPhoneNumberSuccess" ? "Phone number has been added"
                         : message == "RemovePhoneNumberSuccess" ? "Phone number was removed"
+                        : message == "ProfileUpdateSuccess" ? "Your profile has been updated"
                         : String.Empty;
                     successMessage.Visible = !String.IsNullOrEmpty(SuccessMessage);
                 }
             }
         }
 
+        private void LoadUserProfile()
+        {
+            var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var user = manager.FindById(User.Identity.GetUserId());
+
+            if (user != null)
+            {
+                UserFirstName.Text = user.FirstName;
+                UserLastName.Text = user.LastName;
+                UserCompanyName.Text = user.CompanyName;
+                UserEmail.Text = user.Email;
+            }
+        }
+
+        protected void UpdateProfile_Click(object sender, EventArgs e)
+        {
+            if (IsValid)
+            {
+                var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                var user = manager.FindById(User.Identity.GetUserId());
+
+                if (user != null)
+                {
+                    user.FirstName = UserFirstName.Text;
+                    user.LastName = UserLastName.Text;
+                    user.CompanyName = UserCompanyName.Text;
+
+                    var result = manager.Update(user);
+                    if (result.Succeeded)
+                    {
+                        Response.Redirect("/Account/Manage?m=ProfileUpdateSuccess");
+                    }
+                    else
+                    {
+                        AddErrors(result);
+                    }
+                }
+            }
+        }
 
         private void AddErrors(IdentityResult result)
         {

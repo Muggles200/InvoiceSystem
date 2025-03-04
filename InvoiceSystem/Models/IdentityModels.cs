@@ -13,6 +13,11 @@ namespace InvoiceSystem.Models
     // You can add User data for the user by adding more properties to your User class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string CompanyName { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        
         public ClaimsIdentity GenerateUserIdentity(ApplicationUserManager manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -30,7 +35,7 @@ namespace InvoiceSystem.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("InvoiceDBConn", throwIfV1Schema: false)
         {
         }
 
@@ -44,6 +49,15 @@ namespace InvoiceSystem.Models
 #region Helpers
 namespace InvoiceSystem
 {
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public class AuthorizeRolesAttribute : System.Web.Mvc.AuthorizeAttribute
+    {
+        public AuthorizeRolesAttribute(params string[] roles) : base()
+        {
+            Roles = string.Join(",", roles);
+        }
+    }
+
     public static class IdentityHelper
     {
         // Used for XSRF when linking external logins
@@ -93,6 +107,21 @@ namespace InvoiceSystem
             else
             {
                 response.Redirect("~/");
+            }
+        }
+        
+        public static bool IsUserInRole(string userId, string roleName)
+        {
+            var context = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            return userManager.IsInRole(userId, roleName);
+        }
+        
+        public static void EnsureUserIsInRole(string userId, string roleName, HttpResponse response)
+        {
+            if (!IsUserInRole(userId, roleName))
+            {
+                response.Redirect("~/Account/AccessDenied.aspx");
             }
         }
     }
