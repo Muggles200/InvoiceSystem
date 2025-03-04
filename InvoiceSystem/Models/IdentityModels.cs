@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using InvoiceSystem.Models;
+using System.Web.Security;
 
 namespace InvoiceSystem.Models
 {
@@ -49,16 +50,23 @@ namespace InvoiceSystem.Models
 #region Helpers
 namespace InvoiceSystem
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class AuthorizeRolesAttribute : System.Web.Mvc.AuthorizeAttribute
+    public class AuthorizeRolesAttribute : AuthorizationStoreRoleProvider
     {
-        public AuthorizeRolesAttribute(params string[] roles) : base()
+        private string _roles;
+
+        public AuthorizeRolesAttribute(params string[] roles)
         {
-            Roles = string.Join(",", roles);
+            _roles = string.Join(",", roles);
+        }
+
+        public string Roles
+        {
+            get { return _roles; }
+            set { _roles = value; }
         }
     }
 
-    public static class IdentityHelper
+    public class IdentityHelperUtils
     {
         // Used for XSRF when linking external logins
         public const string XsrfKey = "XsrfId";
