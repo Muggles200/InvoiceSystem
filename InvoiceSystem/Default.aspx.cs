@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace InvoiceSystem
 {
@@ -18,61 +20,150 @@ namespace InvoiceSystem
             }
         }
 
-        private void LoadDashboardData()
+        // Helper method to determine status badge class
+        protected string GetStatusBadgeClass(string status)
         {
-            // In a real application, this data would come from a database
-            // For demo purposes, we'll create sample data
-
-            // Update summary statistics
-            LabelOpenInvoices.Text = "12";
-            LabelPaidAmount.Text = "$4,850.00";
-            LabelOverdueInvoices.Text = "3";
-
-            // Load recent invoices
-            DataTable recentInvoices = GetRecentInvoices();
-            GridViewRecentInvoices.DataSource = recentInvoices;
-            GridViewRecentInvoices.DataBind();
-
-            // Load payment reminders
-            DataTable reminders = GetPaymentReminders();
-            RepeaterReminders.DataSource = reminders;
-            RepeaterReminders.DataBind();
+            switch (status.ToLower())
+            {
+                case "paid":
+                    return "status-badge status-paid";
+                case "pending":
+                    return "status-badge status-pending";
+                case "overdue":
+                    return "status-badge status-overdue";
+                default:
+                    return "status-badge";
+            }
         }
 
-        private DataTable GetRecentInvoices()
+        private void LoadDashboardData()
         {
-            // In a real application, this would be a database query
+            // Get real data from the database
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                
+                // Update summary statistics
+                LabelOpenInvoices.Text = GetOpenInvoicesCount(connection).ToString();
+                LabelPaidAmount.Text = GetPaidAmountThisMonth(connection).ToString("C");
+                LabelOverdueInvoices.Text = GetOverdueInvoicesCount(connection).ToString();
+                LabelTotalCustomers.Text = GetTotalCustomersCount(connection).ToString();
+
+                // Load recent invoices
+                GridViewRecentInvoices.DataSource = GetRecentInvoices(connection);
+                GridViewRecentInvoices.DataBind();
+
+                // Load recent customers
+                GridViewRecentCustomers.DataSource = GetRecentCustomers(connection);
+                GridViewRecentCustomers.DataBind();
+
+                // Load payment reminders
+                RepeaterReminders.DataSource = GetPaymentReminders(connection);
+                RepeaterReminders.DataBind();
+            }
+        }
+
+        private int GetOpenInvoicesCount(SqlConnection connection)
+        {
+            using (SqlCommand command = new SqlCommand(
+                "SELECT COUNT(*) FROM Invoices WHERE Status = 'Pending'", connection))
+            {
+                return (int)command.ExecuteScalar();
+            }
+        }
+
+        private decimal GetPaidAmountThisMonth(SqlConnection connection)
+        {
+            using (SqlCommand command = new SqlCommand(
+                @"SELECT ISNULL(SUM(Amount), 0) FROM Invoices 
+                  WHERE Status = 'Paid' 
+                  AND MONTH(PaymentDate) = MONTH(GETDATE()) 
+                  AND YEAR(PaymentDate) = YEAR(GETDATE())", connection))
+            {
+                object result = command.ExecuteScalar();
+                return result == DBNull.Value ? 0 : Convert.ToDecimal(result);
+            }
+        }
+
+        private int GetOverdueInvoicesCount(SqlConnection connection)
+        {
+            using (SqlCommand command = new SqlCommand(
+                @"SELECT COUNT(*) FROM Invoices 
+                  WHERE Status = 'Pending' 
+                  AND DueDate < GETDATE()", connection))
+            {
+                return (int)command.ExecuteScalar();
+            }
+        }
+
+        private int GetTotalCustomersCount(SqlConnection connection)
+        {
+            using (SqlCommand command = new SqlCommand(
+                "SELECT COUNT(*) FROM Customers", connection))
+            {
+                return (int)command.ExecuteScalar();
+            }
+        }
+
+        private DataTable GetRecentInvoices(SqlConnection connection)
+        {
             DataTable dt = new DataTable();
-            dt.Columns.Add("InvoiceID", typeof(int));
-            dt.Columns.Add("CustomerName", typeof(string));
-            dt.Columns.Add("InvoiceDate", typeof(DateTime));
-            dt.Columns.Add("Amount", typeof(decimal));
-            dt.Columns.Add("Status", typeof(string));
-
-            // Add sample data
-            dt.Rows.Add(1001, "Acme Corporation", DateTime.Now.AddDays(-2), 1250.00m, "Pending");
-            dt.Rows.Add(1002, "Globex Industries", DateTime.Now.AddDays(-5), 3450.75m, "Paid");
-            dt.Rows.Add(1003, "Wayne Enterprises", DateTime.Now.AddDays(-7), 875.50m, "Overdue");
-            dt.Rows.Add(1004, "Stark Industries", DateTime.Now.AddDays(-10), 2340.00m, "Pending");
-            dt.Rows.Add(1005, "Umbrella Corporation", DateTime.Now.AddDays(-14), 1780.25m, "Paid");
-
+            
+            using (SqlCommand command = new SqlCommand(
+                @"SELECT TOP 5 I.InvoiceID, C.Name AS CustomerName, I.InvoiceDate, I.Amount, I.Status
+                FROM Invoices I
+                INNER JOIN Customers C ON I.CustomerID = C.CustomerID
+                ORDER BY I.InvoiceDate DESC", connection))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+            }
+            
             return dt;
         }
 
-        private DataTable GetPaymentReminders()
+        private DataTable GetRecentCustomers(SqlConnection connection)
         {
-            // In a real application, this would be a database query
             DataTable dt = new DataTable();
-            dt.Columns.Add("InvoiceID", typeof(int));
-            dt.Columns.Add("CustomerName", typeof(string));
-            dt.Columns.Add("DaysRemaining", typeof(int));
-            dt.Columns.Add("Amount", typeof(decimal));
+            
+            using (SqlCommand command = new SqlCommand(
+                @"SELECT TOP 5 CustomerID, Name, Email, City, State
+                FROM Customers
+                ORDER BY CustomerID DESC", connection))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+            }
+            
+            return dt;
+        }
 
-            // Add sample data
-            dt.Rows.Add(1001, "Acme Corporation", 2, 1250.00m);
-            dt.Rows.Add(1004, "Stark Industries", 5, 2340.00m);
-            dt.Rows.Add(1007, "Aperture Science", 3, 1850.75m);
-
+        private DataTable GetPaymentReminders(SqlConnection connection)
+        {
+            DataTable dt = new DataTable();
+            
+            using (SqlCommand command = new SqlCommand(
+                @"SELECT I.InvoiceID, C.Name AS CustomerName, 
+                  DATEDIFF(day, GETDATE(), I.DueDate) AS DaysRemaining, I.Amount
+                FROM Invoices I
+                INNER JOIN Customers C ON I.CustomerID = C.CustomerID
+                WHERE I.Status = 'Pending'
+                AND I.DueDate > GETDATE()
+                AND DATEDIFF(day, GETDATE(), I.DueDate) <= 7
+                ORDER BY I.DueDate ASC", connection))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+            }
+            
             return dt;
         }
     }
